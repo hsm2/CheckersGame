@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+    <ImageView
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        tools:src="@drawable/normal_red_piece"
+
+        android:id="@+id/user_picture_view"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16sp"
+
+            android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            tools:text="Harish Manikantan"
+
+            android:id="@+id/user_name_view"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:textSize="12sp"
+            tools:text="1/17/12"
+
+            android:id="@+id/game_time_view"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="8dp"
+        android:paddingLeft="60dp"
+        android:orientation="horizontal">
+
+    <Button
+        android:layout_width="100dp"
+        android:layout_height="40dp"
+
+        android:text="Accept"
+        android:background="@color/gameBackground"
+
+        android:id="@+id/accept_view"/>
+
+    <Button
+        android:layout_width="100dp"
+        android:layout_height="40dp"
+        android:layout_marginLeft="8dp"
+
+        android:text="Decline"
+        android:background="#00000000"
+
+        android:id="@+id/decline_view"/>
+
+    </LinearLayout>
+
+</LinearLayout>
