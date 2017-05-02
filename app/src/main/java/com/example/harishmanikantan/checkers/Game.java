@@ -337,6 +337,7 @@ public class Game extends Activity {
                 || (winner.equals(Checkers.PLAYER_RED_NAME) && !your_id.equals(host))) {
 
             winnerMessageView.setText("YOU WON!");
+            databaseReference.child("winner").setValue(your_id);
             updateUserScore();
         }
         else {
