@@ -22,7 +22,6 @@
     <ImageView
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:src="@mipmap/ic_launcher"
 
         android:id="@+id/red_picture_view"/>
 
@@ -55,8 +54,10 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textStyle="bold"
         android:layout_centerInParent="true"
+
+        android:textSize="50dp"
+        android:textStyle="bold"
 
         android:id="@+id/winner_message_view"/>
 
@@ -72,7 +73,6 @@
     <ImageView
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:src="@mipmap/ic_launcher"
 
         android:id="@+id/black_picture_view"/>
 

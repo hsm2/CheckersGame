@@ -209,15 +209,14 @@ public class Checkers {
      * @return true if game is on, else false
      */
     public boolean isGameOn() {
-        if (board.getRedPiecesLeft() == 0 || board.getBlackPiecesLeft() == 0) {
-            return false;
-        }
 
         if (board.getRedPiecesLeft() == 0) {
             winner = PLAYER_BLACK_NAME;
+            return false;
         }
-        else {
+        else if (board.getBlackPiecesLeft() == 0) {
             winner = PLAYER_RED_NAME;
+            return false;
         }
 
         return true;

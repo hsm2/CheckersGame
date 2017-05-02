@@ -1,11 +1,11 @@
 package com.example.harishmanikantan.checkers;
 
 import android.content.Intent;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -13,30 +13,33 @@ import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
-public class Notification extends AppCompatActivity {
+public class Leaderboard extends AppCompatActivity {
 
     /**
-     * This method is called when the notification activity is created
+     * This method is called when the Leaderboard activity is created
      * @param savedInstanceState
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_notification);
+        setContentView(R.layout.activity_leaderboard);
 
-        setTitle("Notifications");
+        setTitle("Leaderboard");
 
         Intent intent = getIntent();
-        ArrayList<GameRequest> gameRequests = intent.getParcelableArrayListExtra(Dashboard.GAME_REQUESTS);
+        ArrayList<User> users = intent.getParcelableArrayListExtra(Dashboard.USERS);
+        Collections.sort(users);
 
-        RecyclerView notificationRecyclerView = (RecyclerView) findViewById(R.id.notification_recycler_view);
+        RecyclerView leaderboardRecyclerView = (RecyclerView) findViewById(R.id.leaderboard_recycler_view);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        notificationRecyclerView.setLayoutManager(layoutManager);
-        notificationRecyclerView.setHasFixedSize(true);
+        leaderboardRecyclerView.setLayoutManager(layoutManager);
+        leaderboardRecyclerView.setHasFixedSize(true);
 
-        NotificationAdapter notificationAdapter = new NotificationAdapter(gameRequests, this);
-        notificationRecyclerView.setAdapter(notificationAdapter);
+        LeaderboardAdapter leaderboardAdapter = new LeaderboardAdapter(users);
+        leaderboardAdapter.notifyDataSetChanged();
+        leaderboardRecyclerView.setAdapter(leaderboardAdapter);
     }
 
     /**
@@ -59,8 +62,9 @@ public class Notification extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         FirebaseAuth.getInstance().signOut();
         LoginManager.getInstance().logOut();
-        startActivity(new Intent(Notification.this, LoginActivity.class));
+        startActivity(new Intent(Leaderboard.this, LoginActivity.class));
         finish();
         return true;
     }
+
 }

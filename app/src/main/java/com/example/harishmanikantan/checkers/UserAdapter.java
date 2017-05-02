@@ -31,7 +31,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
     private ArrayList<User> users;
 
     /**
-     * The constructor which initializes the users arraylist
+     * This constructor initializes the users arraylist
      * @param users
      */
     public UserAdapter(ArrayList<User> users) {
@@ -108,6 +108,9 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         return users.size();
     }
 
+    /**
+     * Custom RecyclerView ViewHolder class
+     */
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         public ImageView pictureView;

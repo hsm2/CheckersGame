@@ -8,8 +8,15 @@
         app:showAsAction="always"
         android:visible="true"
         android:title="notifications"
-        android:orderInCategory="100"
-        />
+        android:orderInCategory="2"/>
+
+    <item
+        android:id="@+id/action_leaderboard"
+        android:icon="@drawable/leaderboard_icon"
+        app:showAsAction="always"
+        android:visible="true"
+        android:title="leaderboard"
+        android:orderInCategory="1"/>
 
     <item
         android:id="@+id/logout"

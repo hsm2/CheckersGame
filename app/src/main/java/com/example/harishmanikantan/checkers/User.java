@@ -5,16 +5,19 @@ package com.example.harishmanikantan.checkers;
  */
 
 import android.net.Uri;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import java.util.ArrayList;
 
-public class User {
+public class User implements Parcelable, Comparable<User> {
 
     private String name;
     private Uri photoUri;
     private String uid;
     private ArrayList<GameRequest> gameRequests;
     private int numberOfGamesPlayed;
+    private int totalScore;
 
     /**
      * Creates a new user with its attributes
@@ -24,12 +27,26 @@ public class User {
      * @param gameRequests game requests of user
      * @param numberOfGamesPlayed number of games played by user
      */
-    public User(String name, Uri photoUri, String uid, ArrayList<GameRequest> gameRequests, int numberOfGamesPlayed){
+    public User(String name, Uri photoUri, String uid, ArrayList<GameRequest> gameRequests, int numberOfGamesPlayed, int totalScore){
         this.name = name;
         this.photoUri = photoUri;
         this.uid = uid;
         this.gameRequests = gameRequests;
         this.numberOfGamesPlayed = numberOfGamesPlayed;
+        this.totalScore = totalScore;
+    }
+
+    /**
+     * Initializes the member variables with a Parcel object
+     * @param in
+     */
+    protected User(Parcel in) {
+        name = in.readString();
+        photoUri = Uri.parse(in.readString());
+        uid = in.readString();
+        gameRequests = in.readArrayList(GameRequest.class.getClassLoader());
+        numberOfGamesPlayed = in.readInt();
+        totalScore = in.readInt();
     }
 
     /**
@@ -70,5 +87,55 @@ public class User {
      */
     public int getNumberOfGamesPlayed() {
         return numberOfGamesPlayed;
+    }
+
+    /**
+     * This method returns the total score of the player
+     * @return
+     */
+    public int getTotalScore() {
+        return totalScore;
+    }
+
+    /**
+     * This method describes the contents
+     * @return
+     */
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    /**
+     * This method writes the member data to a Parcel object
+     * @param dest
+     * @param i
+     */
+    @Override
+    public void writeToParcel(Parcel dest, int i) {
+        dest.writeString(name);
+        dest.writeString(String.valueOf(photoUri));
+        dest.writeString(uid);
+        dest.writeList(gameRequests);
+        dest.writeInt(numberOfGamesPlayed);
+        dest.writeInt(totalScore);
+    }
+
+    public static final Parcelable.Creator<User> CREATOR = new Parcelable.Creator<User>() {
+
+        @Override
+        public User createFromParcel(Parcel parcel) {
+            return new User(parcel);
+        }
+
+        @Override
+        public User[] newArray(int size) {
+            return new User[size];
+        }
+    };
+
+    @Override
+    public int compareTo(User compareUser) {
+        return compareUser.totalScore - totalScore;
     }
 }

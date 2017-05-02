@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+
+        android:text="1"
+        android:textSize="16sp"
+
+        android:id="@+id/rank_view"/>
+
+    <ImageView
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_marginLeft="16dp"
+
+        android:src="@mipmap/ic_launcher"
+
+        android:id="@+id/user_picture_view"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="25dp"
+        android:layout_weight="1"
+
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        tools:text="Harish Manikantan"
+        android:textSize="16sp"
+
+        android:id="@+id/name_view"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginRight="16dp"
+
+        android:text="100"
+        android:textSize="16sp"
+
+        android:id="@+id/score_view"/>
+
+</LinearLayout>

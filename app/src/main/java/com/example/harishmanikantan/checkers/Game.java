@@ -52,9 +52,9 @@ public class Game extends Activity {
     public static final String OPPONENT_ID = "OPPONENT_ID";
 
     private DatabaseReference databaseReference;
+    private DatabaseReference userReference;
     private FirebaseUser currentUser;
 
-    private boolean flag = true;
     private String currentTurn = "";
     private String your_id = "";
     private String opponent_id = "";
@@ -70,6 +70,8 @@ public class Game extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
+
+        setTitle("");
 
         Intent intent = getIntent();
         gameKey = intent.getStringExtra(GAME);
@@ -282,7 +284,6 @@ public class Game extends Activity {
                     displayWinner();
                 }
 
-                flag = false;
                 boardView.setClickable(false);
                 updateDatabase(move);
             }
@@ -329,8 +330,11 @@ public class Game extends Activity {
 
         winnerMessageView.setVisibility(View.VISIBLE);
 
-        if ((winner.equals(Checkers.PLAYER_BLACK_NAME) && !your_id.equals(host))
-                || winner.equals(Checkers.PLAYER_BLACK_NAME) && your_id.equals(host)) {
+        Log.d("Winner", winner);
+        Log.d("Winner", your_id);
+
+        if ((winner.equals(Checkers.PLAYER_BLACK_NAME) && your_id.equals(host))
+                || (winner.equals(Checkers.PLAYER_RED_NAME) && !your_id.equals(host))) {
 
             winnerMessageView.setText("YOU WON!");
             updateUserScore();
@@ -345,13 +349,14 @@ public class Game extends Activity {
      * When the game is over, this method updates the winner's score by 100
      */
     private void updateUserScore() {
-        final DatabaseReference userReference = FirebaseDatabase.getInstance().getReference().child("users");
+        userReference = FirebaseDatabase.getInstance().getReference()
+                .child("users").child(currentUser.getUid());
 
-        userReference.child(currentUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+        userReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                int score = Integer.valueOf(dataSnapshot.child("score").getValue(String.class));
-                userReference.child("score").setValue(score + 100);
+                int score = Integer.valueOf(dataSnapshot.child("total_score").getValue(String.class));
+                userReference.child("total_score").setValue((score + 100) + "");
             }
 
             @Override

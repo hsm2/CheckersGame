@@ -188,7 +188,7 @@ public class LoginActivity extends Activity {
                     databaseReference.child("photo_uri").setValue(currentUser.getPhotoUrl().toString());
                     databaseReference.child("date_joined").setValue(getCurrentUTCTime());
                     databaseReference.child("games_played").setValue("0");
-                    databaseReference.child("score").setValue("0");
+                    databaseReference.child("total_score").setValue("0");
                 }
 
             }
@@ -214,4 +214,10 @@ public class LoginActivity extends Activity {
         return sdf.format(new Date(time));
     }
 
+    @Override
+    public void onBackPressed() {
+        if (currentUser != null) {
+            super.onBackPressed();
+        }
+    }
 }

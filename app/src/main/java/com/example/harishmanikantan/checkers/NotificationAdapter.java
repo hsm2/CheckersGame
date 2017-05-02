@@ -185,7 +185,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
             int hour = date.getHours();
             int min = date.getMinutes();
             int day = date.getDay();
-            String month = new DateFormatSymbols().getMonths()[date.getMonth() - 1];
+            String month = new DateFormatSymbols().getMonths()[date.getMonth()];
 
             String dayPostFix = "";
 

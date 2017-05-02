@@ -40,6 +40,7 @@ public class Dashboard extends AppCompatActivity {
     private int games_played = 0;
 
     public static final String GAME_REQUESTS = "GAME_REQUESTS";
+    public static final String USERS = "USERS";
 
     /**
      * This method is called when the dashboard activity is called
@@ -51,6 +52,8 @@ public class Dashboard extends AppCompatActivity {
         setContentView(R.layout.activity_dashboard);
 
         context = this;
+
+        setTitle("Dashboard");
 
         userRecyclerView = (RecyclerView) findViewById(R.id.user_recycler_view);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
@@ -131,6 +134,7 @@ public class Dashboard extends AppCompatActivity {
                     String name = snapshot.child("name").getValue(String.class);
                     Uri photo_uri = Uri.parse(snapshot.child("photo_uri").getValue(String.class));
                     String uid = snapshot.getKey();
+                    int totalScore = Integer.valueOf(snapshot.child("total_score").getValue(String.class));
 
                     int numberOfGamesPlayed = Integer.valueOf(
                             snapshot.child("games_played").getValue(String.class));
@@ -151,7 +155,7 @@ public class Dashboard extends AppCompatActivity {
                     Log.d("Database", uid);
                     Log.d("Database", photo_uri.toString());
 
-                    User user = new User(name, photo_uri, uid, gameRequests, numberOfGamesPlayed);
+                    User user = new User(name, photo_uri, uid, gameRequests, numberOfGamesPlayed, totalScore);
                     gameUsers.add(user);
 
                     if (user.getUid().equals(currentFirebaseUser.getUid())) {
@@ -180,14 +184,17 @@ public class Dashboard extends AppCompatActivity {
      */
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        MenuItem item = menu.findItem(R.id.action_notification);
+        MenuItem notificationItem = menu.findItem(R.id.action_notification);
 
         if (currentUser == null || currentUser.getGameRequests().size() == 0) {
-            item.setIcon(R.drawable.notifications_off_icon);
+            notificationItem.setIcon(R.drawable.notifications_off_icon);
         }
         else {
-            item.setIcon(R.drawable.notification_on_icon);
+            notificationItem.setIcon(R.drawable.notification_on_icon);
         }
+
+        MenuItem leaderboardItem = menu.findItem(R.id.action_leaderboard);
+        leaderboardItem.setIcon(R.drawable.leaderboard_icon);
 
         return true;
     }
@@ -216,11 +223,18 @@ public class Dashboard extends AppCompatActivity {
         if (item.getItemId() == R.id.logout) {
             FirebaseAuth.getInstance().signOut();
             LoginManager.getInstance().logOut();
+            currentUser = null;
+            startActivity(new Intent(Dashboard.this, LoginActivity.class));
             finish();
         }
         else if (item.getItemId() == R.id.action_notification && currentUser.getGameRequests().size() != 0) {
             Intent intent = new Intent(Dashboard.this, Notification.class);
             intent.putParcelableArrayListExtra(GAME_REQUESTS, currentUser.getGameRequests());
+            startActivity(intent);
+        }
+        else if (item.getItemId() == R.id.action_leaderboard) {
+            Intent intent = new Intent(Dashboard.this, Leaderboard.class);
+            intent.putParcelableArrayListExtra(USERS, gameUsers);
             startActivity(intent);
         }
 
