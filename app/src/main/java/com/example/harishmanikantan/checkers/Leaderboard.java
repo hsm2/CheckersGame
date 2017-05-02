@@ -40,6 +40,7 @@ public class Leaderboard extends AppCompatActivity {
         LeaderboardAdapter leaderboardAdapter = new LeaderboardAdapter(users);
         leaderboardAdapter.notifyDataSetChanged();
         leaderboardRecyclerView.setAdapter(leaderboardAdapter);
+        //dsfsdf
     }
 
     /**
