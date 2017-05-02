@@ -5,7 +5,7 @@ import java.util.ArrayList;
 /**
  * Created by harishmanikantan on 3/17/17.
  */
-public class EasyPlayer extends Player implements PlayerStrategy {
+/*public class EasyPlayer extends Player implements PlayerStrategy {
 
     private final int NORTH_WEST = 0;
     private final int NORTH_EAST = 1;
@@ -423,3 +423,4 @@ public class EasyPlayer extends Player implements PlayerStrategy {
         return null;
     }
 }
+*/

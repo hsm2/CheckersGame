@@ -9,6 +9,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -19,6 +21,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 public class Game extends Activity {
 
@@ -26,6 +29,17 @@ public class Game extends Activity {
 
     private GridView boardView;
     private PieceAdapter pieceAdapter;
+    private TextView winnerMessageView;
+
+    private ImageView redPictureView;
+    private ImageView blackPictureView;
+    private TextView redNameView;
+    private TextView blackNameView;
+
+    private String redPictureUrl;
+    private String blackPictureUrl;
+    private String redName;
+    private String blackName;
 
     private boolean pieceSelected = false;
     private int selectedPositionX = -1;
@@ -45,6 +59,13 @@ public class Game extends Activity {
     private String your_id = "";
     private String opponent_id = "";
 
+    private String host = "";
+
+    /**
+     * This method is called when the activity is created. It creates the game, board and calls a
+     * listener for turns
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,9 +78,15 @@ public class Game extends Activity {
                 .child("games").child(gameKey);
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
-        checkers = new Checkers();
+        blackNameView = (TextView) findViewById(R.id.black_name_view);
+        redNameView = (TextView) findViewById(R.id.red_name_view);
+        blackPictureView = (ImageView) findViewById(R.id.black_picture_view);
+        redPictureView = (ImageView) findViewById(R.id.red_picture_view);
 
-        createGame();
+        winnerMessageView = (TextView) findViewById(R.id.winner_message_view);
+        winnerMessageView.setVisibility(View.INVISIBLE);
+
+        checkers = new Checkers();
 
         pieceAdapter = new PieceAdapter(this, checkers.board);
         boardView = (GridView) findViewById(R.id.board_view);
@@ -77,21 +104,28 @@ public class Game extends Activity {
             }
         });
 
-        listenForTurns();
         loadHostAndOpponent();
+        listenForTurns();
+        listenForMoves();
     }
 
+    /**
+     * This method loads the host and opponent of the game
+     */
     private void loadHostAndOpponent() {
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 your_id = currentUser.getUid();
                 opponent_id = dataSnapshot.child("opponent").getValue(String.class);
+                host = your_id;
 
                 if (currentUser.getUid().equals(opponent_id)) {
                     opponent_id = dataSnapshot.child("host").getValue(String.class);
+                    host = opponent_id;
                 }
 
+                loadPlayersInformation();
             }
 
             @Override
@@ -101,6 +135,49 @@ public class Game extends Activity {
         });
     }
 
+    /**
+     * This method loads the players' information like photo uri and name
+     */
+    private void loadPlayersInformation() {
+        DatabaseReference userReference = FirebaseDatabase.getInstance().getReference().child("users");
+
+        userReference.child(opponent_id).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                if (host.equals(opponent_id)) {
+                    blackName = dataSnapshot.child("name").getValue(String.class);
+                    blackPictureUrl = dataSnapshot.child("photo_uri").getValue(String.class);
+
+                    redName = currentUser.getDisplayName();
+                    redPictureUrl = currentUser.getPhotoUrl().toString();
+                }
+                else {
+                    redName = dataSnapshot.child("name").getValue(String.class);
+                    redPictureUrl = dataSnapshot.child("photo_uri").getValue(String.class);
+
+                    blackName = currentUser.getDisplayName();
+                    blackPictureUrl = currentUser.getPhotoUrl().toString();
+                }
+
+                redNameView.setText(redName);
+                Picasso.with(redPictureView.getContext()).load(redPictureUrl).into(redPictureView);
+
+                blackNameView.setText(blackName);
+                Picasso.with(blackPictureView.getContext()).load(blackPictureUrl).into(blackPictureView);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
+    /**
+     * This method listens for the current turn in the game
+     */
     private void listenForTurns() {
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -116,7 +193,10 @@ public class Game extends Activity {
         });
     }
 
-    private void createGame() {
+    /**
+     * This method listens for moves and changes the board if it was an opponent's move
+     */
+    private void listenForMoves() {
 
         databaseReference.child("moves").addChildEventListener(new ChildEventListener() {
             @Override
@@ -135,12 +215,7 @@ public class Game extends Activity {
                     }
 
                     boardView.setClickable(true);
-                    //flag = false;
                 }
-                /*else {
-                    flag = true;
-                    boardView.setClickable(false);
-                }*/
             }
 
             @Override
@@ -166,6 +241,11 @@ public class Game extends Activity {
 
     }
 
+    /**
+     * This method changes the String format of a move to a Move object
+     * @param value String format of a move
+     * @return a Move object
+     */
     private Move convertStringToMove(String value) {
         int sourceX = Integer.valueOf(value.substring(0, 1));
         int sourceY = Integer.valueOf(value.substring(2, 3));
@@ -175,6 +255,10 @@ public class Game extends Activity {
         return new Move(sourceX, sourceY, targetX, targetY);
     }
 
+    /**
+     * This method is called when a piece is touched during the player's turn
+     * @param position
+     */
     private void moveOnTouch(int position) {
         int targetX = position / Board.DIMENSION;
         int targetY = position % Board.DIMENSION;
@@ -216,19 +300,65 @@ public class Game extends Activity {
 
     }
 
+    /**
+     * This method converts a move to String format and adds it to the database
+     * @param move the Move object
+     */
     private void updateDatabase(Move move) {
         String convertedMove = convertMoveToString(move);
         databaseReference.child("moves").child(numberOfMoves + "").setValue(convertedMove);
     }
 
+    /**
+     * This method converts a move object to a String format
+     * @param move
+     * @return
+     */
     private String convertMoveToString(Move move) {
         return move.getSourceX() + "," + move.getSourceY() + "-"
                 + move.getTargetX() + "," + move.getTargetY();
     }
 
+    /**
+     * When the game is over, this method makes the board invisible and displays a message
+     * if you won or lost
+     */
     private void displayWinner() {
         boardView.setVisibility(View.INVISIBLE);
         String winner = checkers.getWinner();
+
+        winnerMessageView.setVisibility(View.VISIBLE);
+
+        if ((winner.equals(Checkers.PLAYER_BLACK_NAME) && !your_id.equals(host))
+                || winner.equals(Checkers.PLAYER_BLACK_NAME) && your_id.equals(host)) {
+
+            winnerMessageView.setText("YOU WON!");
+            updateUserScore();
+        }
+        else {
+            winnerMessageView.setText("YOU LOST!");
+        }
+
+    }
+
+    /**
+     * When the game is over, this method updates the winner's score by 100
+     */
+    private void updateUserScore() {
+        final DatabaseReference userReference = FirebaseDatabase.getInstance().getReference().child("users");
+
+        userReference.child(currentUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                int score = Integer.valueOf(dataSnapshot.child("score").getValue(String.class));
+                userReference.child("score").setValue(score + 100);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
 }

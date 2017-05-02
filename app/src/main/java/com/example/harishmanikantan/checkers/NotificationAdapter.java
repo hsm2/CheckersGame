@@ -36,12 +36,24 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     private DatabaseReference ref;
     private Context context;
 
+    /**
+     * This method constructs a notification adapter with game requests
+     * and the context of the calling activity
+     * @param gameRequests the game requests
+     * @param context the context of the calling activity
+     */
     public NotificationAdapter(ArrayList<GameRequest> gameRequests, Context context) {
         this.gameRequests = gameRequests;
         this.ref = FirebaseDatabase.getInstance().getReference().child("users");
         this.context = context;
     }
 
+    /**
+     * This method creates a viewholder for each game request
+     * @param parent
+     * @param viewType
+     * @return a viewholder
+     */
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         final View notificationItem = LayoutInflater.from(parent.getContext())
@@ -50,6 +62,12 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         return new ViewHolder(notificationItem);
     }
 
+    /**
+     * This method binds the data of a game request at a particular position
+     * to its corresponding viewholder
+     * @param holder
+     * @param position
+     */
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
         final GameRequest gameRequest = gameRequests.get(position);
@@ -76,6 +94,10 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
 
     }
 
+    /**
+     * When a game request is accepted, this method creates and starts a game
+     * @param gameRequest
+     */
     private void createGameAndStartGame(GameRequest gameRequest) {
         DatabaseReference gameReference = FirebaseDatabase.getInstance().getReference();
         DatabaseReference userReference = FirebaseDatabase.getInstance().getReference();
@@ -99,6 +121,10 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         ((Activity) context).finish();
     }
 
+    /**
+     * When a game request is declined, this method deletes the game request from the database
+     * @param gameRequest
+     */
     private void removeGameRequestFromDatabase(GameRequest gameRequest) {
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
 
@@ -109,6 +135,11 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     private ViewHolder tempHolder;
     private GameRequest tempGameRequest;
 
+    /**
+     * This method populates the Viewholder with its data
+     * @param holder
+     * @param gameRequest
+     */
     private void populateRequest(ViewHolder holder, GameRequest gameRequest) {
         tempHolder = holder;
         tempGameRequest = gameRequest;
@@ -139,6 +170,11 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         });
     }
 
+    /**
+     * This method converts UTC time to Simple Time
+     * @param time
+     * @return
+     */
     private String convertUTCtoSimpleTime(String time) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
         sdf.setTimeZone(TimeZone.getTimeZone("gmt"));
@@ -192,12 +228,18 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         return "";
     }
 
+    /**
+     * This method returns the number of items in the game requests arraylist
+     * @return the size of the game requests arraylist
+     */
     @Override
     public int getItemCount() {
         return gameRequests.size();
     }
 
-
+    /**
+     * Custom RecyclerView Viewholder class
+     */
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         public TextView nameView;

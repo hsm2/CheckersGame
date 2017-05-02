@@ -18,26 +18,54 @@ public class PieceAdapter extends BaseAdapter {
     private LayoutInflater layoutInflater;
     private Board board;
 
+    private final int NUM_BOARD_SQUARES = 64;
+
+    /**
+     * This method constructs the PieceAdapter
+     * @param context
+     * @param board
+     */
     public PieceAdapter(Context context, Board board) {
         layoutInflater = LayoutInflater.from(context.getApplicationContext());
         this.board = board;
     }
 
+    /**
+     * This method returns the total number of board squares
+     * @return number of board squares
+     */
     @Override
     public int getCount() {
-        return 64;
+        return NUM_BOARD_SQUARES;
     }
 
+    /**
+     * This method returns item at a position
+     * @param i
+     * @return
+     */
     @Override
     public Object getItem(int i) {
         return null;
     }
 
+    /**
+     * This method returns the item id of a position
+     * @param i
+     * @return
+     */
     @Override
     public long getItemId(int i) {
         return 0;
     }
 
+    /**
+     * This method returns a view of a board square after setting it to its piece and background color
+     * @param i
+     * @param view
+     * @param viewGroup
+     * @return
+     */
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
 

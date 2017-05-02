@@ -6,7 +6,7 @@ import java.util.Scanner;
 /**
  * Created by harishmanikantan on 3/15/17.
  */
-public class UserPlayer extends Player implements PlayerStrategy {
+/*public class UserPlayer extends Player implements PlayerStrategy {
 
     public UserPlayer(int playerType) {
         super(playerType);
@@ -135,4 +135,4 @@ public class UserPlayer extends Player implements PlayerStrategy {
         return true;
     }
 
-}
+}*/

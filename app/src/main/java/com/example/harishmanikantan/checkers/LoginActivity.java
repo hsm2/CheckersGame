@@ -188,6 +188,7 @@ public class LoginActivity extends Activity {
                     databaseReference.child("photo_uri").setValue(currentUser.getPhotoUrl().toString());
                     databaseReference.child("date_joined").setValue(getCurrentUTCTime());
                     databaseReference.child("games_played").setValue("0");
+                    databaseReference.child("score").setValue("0");
                 }
 
             }

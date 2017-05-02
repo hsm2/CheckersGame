@@ -30,10 +30,20 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
     private ArrayList<User> users;
 
+    /**
+     * The constructor which initializes the users arraylist
+     * @param users
+     */
     public UserAdapter(ArrayList<User> users) {
         this.users = users;
     }
 
+    /**
+     * This method creates a viewholder
+     * @param parent
+     * @param viewType
+     * @return a viewholder
+     */
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         final View userView = LayoutInflater.from(parent.getContext())
@@ -42,6 +52,11 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         return new ViewHolder(userView);
     }
 
+    /**
+     * This method binds the data corresponding to a position to a view
+     * @param holder
+     * @param position
+     */
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         final User user = users.get(position);
@@ -58,6 +73,10 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         });
     }
 
+    /**
+     * When a user is selected, this method requests the user to a game
+     * @param opponentUser the user to request a game
+     */
     private void requestPlayerToGame(User opponentUser) {
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference()
@@ -80,6 +99,10 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         return sdf.format(new Date(time));
     }
 
+    /**
+     * This method returns the size of the users arraylist
+     * @return size of users arraylist
+     */
     @Override
     public int getItemCount() {
         return users.size();

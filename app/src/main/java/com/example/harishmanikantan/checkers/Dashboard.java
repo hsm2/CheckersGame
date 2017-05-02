@@ -38,10 +38,13 @@ public class Dashboard extends AppCompatActivity {
     private Context context;
 
     private int games_played = 0;
-    private boolean firstTime = true;
 
     public static final String GAME_REQUESTS = "GAME_REQUESTS";
 
+    /**
+     * This method is called when the dashboard activity is called
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,6 +69,10 @@ public class Dashboard extends AppCompatActivity {
         listenForAcceptedGameRequests();
     }
 
+    /**
+     * This method listens for accepted game requests for the current signed in user
+     * and starts the game activity if it listens one
+     */
     private void listenForAcceptedGameRequests() {
         final DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
                 .child("users").child(currentFirebaseUser.getUid()).child("games");
@@ -109,6 +116,9 @@ public class Dashboard extends AppCompatActivity {
         });
     }
 
+    /**
+     * This method loads all the users of the app
+     */
     public void loadAllUsers() {
         databaseReference = databaseReference.child("users");
 
@@ -125,7 +135,7 @@ public class Dashboard extends AppCompatActivity {
                     int numberOfGamesPlayed = Integer.valueOf(
                             snapshot.child("games_played").getValue(String.class));
 
-                    ArrayList<GameRequest> gameRequests = new ArrayList<GameRequest>();
+                    ArrayList<GameRequest> gameRequests = new ArrayList<>();
 
                     for (DataSnapshot snap : snapshot.child("game_requests").getChildren()) {
                         String sourceUid = snap.getKey();
@@ -163,6 +173,11 @@ public class Dashboard extends AppCompatActivity {
 
     }
 
+    /**
+     * This method prepares the menu options on the toolbar
+     * @param menu
+     * @return
+     */
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         MenuItem item = menu.findItem(R.id.action_notification);
@@ -177,6 +192,11 @@ public class Dashboard extends AppCompatActivity {
         return true;
     }
 
+    /**
+     * This method creates the menu options on the toolbar
+     * @param menu
+     * @return
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -185,6 +205,11 @@ public class Dashboard extends AppCompatActivity {
         return true;
     }
 
+    /**
+     * This method is called when one of the menu options on the toolbar is selected
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 

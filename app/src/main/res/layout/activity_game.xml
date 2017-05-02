@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_game"
     android:layout_width="match_parent"
@@ -11,12 +11,86 @@
     android:background="@color/gameBackground"
     tools:context="com.example.harishmanikantan.checkers.Game">
 
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="60dp"
+        android:layout_marginBottom="8dp"
+
+        android:id="@+id/red_layout">
+
+    <ImageView
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:src="@mipmap/ic_launcher"
+
+        android:id="@+id/red_picture_view"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginBottom="25dp"
+        android:layout_weight="1"
+
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        tools:text="Harish Manikantan"
+        android:textSize="16sp"
+
+        android:id="@+id/red_name_view"/>
+
+    </LinearLayout>
+
     <GridView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:numColumns="8"
+        android:layout_below="@+id/red_layout"
 
         android:id="@+id/board_view"/>
 
-</LinearLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:layout_centerInParent="true"
+
+        android:id="@+id/winner_message_view"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="60dp"
+        android:layout_below="@+id/board_view"
+
+        android:id="@+id/black_layout">
+
+    <ImageView
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:src="@mipmap/ic_launcher"
+
+        android:id="@+id/black_picture_view"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginBottom="25dp"
+        android:layout_weight="1"
+
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        tools:text="Harish Manikantan"
+        android:textSize="16sp"
+
+        android:id="@+id/black_name_view"/>
+
+    </LinearLayout>
+
+</RelativeLayout>

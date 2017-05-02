@@ -5,7 +5,7 @@ import java.util.ArrayList;
 /**
  * Created by harishmanikantan on 3/15/17.
  */
-public class Player {
+/*public class Player {
 
     private int playerType;
 
@@ -132,3 +132,4 @@ public class Player {
         return moves;
     }
 }
+*/

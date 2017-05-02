@@ -10,20 +10,20 @@ public class Checkers {
 
     public Board board;
 
-    private String PLAYER_RED_NAME = "Player Red";
-    private String PLAYER_BLACK_NAME = "Player Black";
+    public static String PLAYER_RED_NAME = "Player Red";
+    public static String PLAYER_BLACK_NAME = "Player Black";
     public static final int RED = 0;
     public static final int BLACK = 1;
 
     private String winner = "";
 
-    private Player redPlayer;
-    private Player blackPlayer;
-
     private int currentPlayer = BLACK;
 
     private String positionToMove = board.INVALID_POSITION;
 
+    /**
+     * This constructor creates a new board
+     */
     public Checkers() {
 
         board = new Board();
@@ -32,6 +32,10 @@ public class Checkers {
 
     }
 
+    /**
+     * This method plays a move on the board
+     * @param move
+     */
     public void play(Move move) {
         boolean pieceWon = false;
         do {
@@ -49,6 +53,11 @@ public class Checkers {
         while (pieceWon);
     }
 
+    /**
+     * This method checks if a piece was won on the move
+     * @param move
+     * @return true if piece was won, else false
+     */
     private boolean pieceWonOnMove(Move move) {
         if (move == null || Math.abs(move.getTargetY() - move.getSourceY()) != 2) {
             positionToMove = Board.INVALID_POSITION;
@@ -58,6 +67,10 @@ public class Checkers {
         return true;
     }
 
+    /**
+     * This method updates the current player based on if a piece was won
+     * @param pieceWon
+     */
     private void updateCurrentPlayer(boolean pieceWon) {
         if (pieceWon) {
             return;
@@ -71,6 +84,10 @@ public class Checkers {
         }
     }
 
+    /**
+     * This method updates the board on a move
+     * @param move
+     */
     public void updateBoard(Move move) {
         if (move == null)
             return;
@@ -87,25 +104,11 @@ public class Checkers {
         }
     }
 
-    private Move getNextMove(String pieceToMove) {
-        Move move = null;
-
-        do {
-            if (currentPlayer == RED) {
-                move = redPlayer.doMove(board, pieceToMove);
-            }
-            else {
-                //System.out.println("Black");
-                move = blackPlayer.doMove(board, pieceToMove);
-                //System.out.println(move.getSourceX() + "," + move.getSourceY());
-                //System.out.println(move.getTargetX() + "," + move.getTargetY());
-            }
-        }
-        while (pieceToMove.equals(Board.INVALID_POSITION) && !isValidMove(move));
-
-        return move;
-    }
-
+    /**
+     * This method checks if a move is valid
+     * @param move
+     * @return true if move is valid, else false
+     */
     public boolean isValidMove(Move move) {
 
         if (move.getSourceX() >= board.DIMENSION || move.getSourceX() < 0 || move.getSourceY() >= board.DIMENSION || move.getSourceY() < 0)
@@ -201,6 +204,10 @@ public class Checkers {
 
     }
 
+    /**
+     * This method checks if the game is on
+     * @return true if game is on, else false
+     */
     public boolean isGameOn() {
         if (board.getRedPiecesLeft() == 0 || board.getBlackPiecesLeft() == 0) {
             return false;
@@ -216,6 +223,12 @@ public class Checkers {
         return true;
     }
 
+    /**
+     * This method checks if the piece selected is valid
+     * @param targetX x coordinate of position
+     * @param targetY y coordinate of position
+     * @return true if valid position, else false
+     */
     public boolean isValidPieceSelection(int targetX, int targetY) {
         String position = board.getPosition(targetX, targetY);
 
@@ -230,6 +243,12 @@ public class Checkers {
         return false;
     }
 
+    /**
+     * This method returns an arraylist of possible jumps from a particular position on the board
+     * @param board board of the game
+     * @param positionToMove position to move
+     * @return arraylist of jump moves
+     */
     protected ArrayList<Move> getJump(Board board, String positionToMove) {
         ArrayList<Move> moves = new ArrayList<>();
 
@@ -300,6 +319,10 @@ public class Checkers {
         return moves;
     }
 
+    /**
+     * This method returns the winner of the game
+     * @return
+     */
     public String getWinner() {
         return winner;
     }

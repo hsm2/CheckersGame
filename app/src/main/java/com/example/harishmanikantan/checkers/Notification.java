@@ -11,6 +11,10 @@ import java.util.ArrayList;
 
 public class Notification extends AppCompatActivity {
 
+    /**
+     * This method is called when the notification activity is created
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,4 +31,5 @@ public class Notification extends AppCompatActivity {
         NotificationAdapter notificationAdapter = new NotificationAdapter(gameRequests, this);
         notificationRecyclerView.setAdapter(notificationAdapter);
     }
+
 }
