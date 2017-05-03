@@ -97,4 +97,81 @@ public class DatabaseTests {
         readSignal.await(10, TimeUnit.SECONDS);
     }
 
+    @Test
+    public void addDataTest() throws Exception {
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+
+        readSignal = new CountDownLatch(1);
+
+        databaseReference.child("test").child("Add test").setValue("true");
+
+        databaseReference.child("test").child("Add test").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                assertTrue(dataSnapshot.getValue(String.class).equals("true"));
+
+                readSignal.countDown();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        readSignal.await(10, TimeUnit.SECONDS);
+    }
+
+    @Test
+    public void removeDataTest() throws Exception {
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+
+        readSignal = new CountDownLatch(1);
+
+        databaseReference.child("test").child("Remove test").setValue("true");
+        databaseReference.child("test").child("Remove test").removeValue();
+
+        databaseReference.child("test").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                assertTrue(!dataSnapshot.hasChild("Remove test"));
+
+                readSignal.countDown();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        readSignal.await(10, TimeUnit.SECONDS);
+    }
+
+    @Test
+    public void modifyDataTest() throws Exception {
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+
+        readSignal = new CountDownLatch(1);
+
+        databaseReference.child("test").child("Modify test").setValue("1");
+        databaseReference.child("test").child("Modify test").setValue("changed");
+
+        databaseReference.child("test").child("Modify test").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                assertTrue(dataSnapshot.getValue(String.class).equals("changed"));
+
+                readSignal.countDown();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        readSignal.await(10, TimeUnit.SECONDS);
+    }
+
 }

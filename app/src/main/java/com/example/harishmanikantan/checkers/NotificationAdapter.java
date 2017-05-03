@@ -36,6 +36,9 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     private DatabaseReference ref;
     private Context context;
 
+    private ViewHolder tempHolder;
+    private GameRequest tempGameRequest;
+
     /**
      * This method constructs a notification adapter with game requests
      * and the context of the calling activity
@@ -131,9 +134,6 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         databaseReference.child("users").child(gameRequest.getTargetUid())
                 .child("game_requests").child(gameRequest.getSourceUid()).removeValue();
     }
-
-    private ViewHolder tempHolder;
-    private GameRequest tempGameRequest;
 
     /**
      * This method populates the Viewholder with its data
